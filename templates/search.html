@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Products</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="{{ url_for('index') }}" class="navbar-logo"
+            >Pari Distributors</a
+          >
+          <!--  
+          <form action="{{ url_for('search_page') }}" method="GET">
+            <input
+              type="text"
+              name="search_query"
+              placeholder="Search by product or brand"
+              required
+            /> 
+            <button type="submit">Search</button>
+          </form>
+          -->
+          <ul class="navbar-menu">
+            <li>
+              <a href="{{ url_for('index') }}" class="navbar-link">Home</a>
+            </li>
+
+            {% if session['role'] == 'owner' %}
+            <li>
+              <a href="{{ url_for('add_product') }}" class="navbar-link"
+                >Add Product</a
+              >
+            </li>
+            {% endif %} {% if session['user_id'] %}
+            <li>
+              <a href="{{ url_for('logout') }}" class="navbar-link login-button"
+                >Logout</a
+              >
+            </li>
+            {% else %}
+            <li>
+              <a href="{{ url_for('login') }}" class="navbar-link">Sign up</a>
+            </li>
+            <li>
+              <a href="{{ url_for('login') }}" class="navbar-link login-button"
+                >Log in</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- 🔍 Search Input at the Top 
+    <div class="search-container">
+      <form method="GET" action="{{ url_for('search_page') }}">
+        <input
+          type="text"
+          name="search_query"
+          placeholder="Enter Product Name or Brand"
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    -->
+
+    <!-- 🔝 Display Top Matched Product First 
+    {% if products %}
+    <h2>Top Matching Product</h2>
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Brand</th>
+        <th>AGM</th>
+        <th>DP</th>
+      </tr>
+      <tr>
+        <td>{{ products[0].id }}</td>
+        <td>{{ products[0].product_name }}</td>
+        <td>{{ products[0].brand }}</td>
+        <td>{{ products[0].agm }}</td>
+        <td>{{ products[0].dp }}</td>
+      </tr>
+    </table>
+    {% endif %} -->
+
+    <!-- 📃 Display All Search Results Below -->
+    <h2>All Matching Results</h2>
+    {% if products %}
+    <table border="1">
+      <tr>
+        <th>S.no</th>
+        <th>Product Name</th>
+        <th>Brand</th>
+        <th>AGM</th>
+        <th>DP</th>
+      </tr>
+      {% for product in products %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ product.product_name }}</td>
+        <td>{{ product.brand }}</td>
+        <td>{{ product.agm }}</td>
+        <td>{{ product.dp }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p><strong>No products found for "{{ search_query }}"</strong></p>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename = 'style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1><em>Pari Distributors</em></h1>
+      <!-- Navigation Bar -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="#" class="navbar-logo">Price List</a>
+          <ul class="navbar-menu">
+            <li>
+              <a href="{{ url_for('index') }}" class="navbar-link"
+                ><i class="fas fa-home"></i> Home</a
+              >
+            </li>
+
+            {% if session['role'] == 'owner' %}
+            <li>
+              <a href="#addProductForm" class="navbar-link"
+                ><i class="fas fa-plus"></i> Add Product</a
+              >
+            </li>
+            {% endif %}
+
+            <li>
+              <a href="{{ url_for('login') }}" class="navbar-link"
+                ><i class="fas fa-user"></i> Login</a
+              >
+            </li>
+
+            {% if session['user_id'] %}
+            <li>
+              <a href="{{ url_for('logout') }}" class="navbar-link"
+                ><i class="fas fa-sign-out-alt"></i> Logout</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+          <div class="navbar-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="login-container">
+      <h2>Login</h2>
+      <!--  Flash Message for errors  -->
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <input type="text" name="username" placeholder="Username" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+
+      <p>
+        Don't have an account?
+        <a href="{{ url_for('register') }}">Register Here</a>
+      </p>
+    </div>
+  </body>
+</html>

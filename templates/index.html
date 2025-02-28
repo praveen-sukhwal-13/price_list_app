@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Price List</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="{{ url_for('index') }}" class="navbar-logo"
+            >Pari Distributors</a
+          >
+
+          <form
+            action="{{ url_for('search_page') }}"
+            method="GET"
+            class="navbar-search"
+          >
+            <input
+              type="text"
+              name="search_query"
+              placeholder="Search by product or brand"
+              required
+            />
+            <button type="submit" class="search-btn">Search</button>
+          </form>
+
+          <ul class="navbar-menu">
+            <li>
+              <a href="{{ url_for('index') }}" class="navbar-link">Home</a>
+            </li>
+
+            {% if session['role'] == 'owner' %}
+            <li>
+              <a href="{{ url_for('add_product') }}" class="navbar-link"
+                >Add Product</a
+              >
+            </li>
+            {% endif %} {% if session['user_id'] %}
+            <li>
+              <a href="{{ url_for('logout') }}" class="navbar-link login-button"
+                >Logout</a
+              >
+            </li>
+            {% else %}
+            <li>
+              <a href="{{ url_for('login') }}" class="navbar-link">Sign up</a>
+            </li>
+            <li>
+              <a href="{{ url_for('login') }}" class="navbar-link login-button"
+                >Log in</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="main-container">
+      <h2 class="page-title">Product Price List</h2>
+
+      <form action="{{ url_for('index') }}" method="GET" class="brand-filter-form">
+        <select name="brand" onchange="this.form.submit()" >
+          <option value="">All</option>
+          {% for brand in brands %}
+          <option value="{{ brand }}"{% if request.args.get('brand') == brand %}selected{% endif %}>
+            {{ brand }}
+          </option>
+          {% endfor %}
+        </select>
+      </form>
+
+      {% if products %}
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>S.no</th>
+            <th>Product Name</th>
+            <th>Brand</th>
+            <th>AGM</th>
+            <th>DP</th>
+            {% if session['role'] == 'owner' %}
+            <th>Actions</th>
+            {% endif %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for index, product in products %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ product.product_name }}</td>
+            <td>{{ product.brand }}</td>
+            <td>{{ product.agm }}</td>
+            <td>{{ product.dp }}</td>
+
+            {% if session['role'] == 'owner' %}
+            <td>
+              <a
+                href="{{ url_for('edit_product', product_id=product.id) }}"
+                class="action-btn edit"
+                >Edit</a
+              >
+              <a
+                href="{{ url_for('delete_product', product_id=product.id) }}"
+                class="action-btn delete"
+                >Delete</a
+              >
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="no-products">No products available.</p>
+      {% endif %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

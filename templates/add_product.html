@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product | Pari Distributors</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <header>
+      <h1><em>Pari Distributors</em></h1>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="{{ url_for('index') }}" class="navbar-logo">Price List</a>
+          <ul class="navbar-menu">
+            <li>
+              <a href="{{ url_for('index') }}" class="navbar-link">Home</a>
+            </li>
+            <li>
+              <a href="{{ url_for('add_product') }}" class="navbar-link active"
+                >Add Product</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="navbar-link">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Product Form -->
+    <div class="form-card">
+      <h2>Add a New Product</h2>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %}
+      <p class="{{ category }}">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form
+        id="productForm"
+        action="{{ url_for('add_product') }}"
+        method="POST"
+      >
+        <div class="input-group">
+          <label for="product_name">Product Name</label>
+          <input
+            type="text"
+            id="product_name"
+            name="product_name"
+            placeholder="Enter Product Name"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="brand">Brand</label>
+          <input
+            type="text"
+            id="brand"
+            name="brand"
+            placeholder="Enter Brand Name"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="agm">AGM</label>
+          <input
+            type="number"
+            id="agm"
+            name="agm"
+            placeholder="Enter AGM"
+            step="0.1"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="dp">DP</label>
+          <input
+            type="number"
+            id="dp"
+            name="dp"
+            placeholder="Enter DP"
+            step="0.1"
+            required
+          />
+        </div>
+
+        <button id="submitButton" type="submit">➕ Add Product</button>
+      </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
